@@ -1,0 +1,56 @@
+body {
+    background-color: darkslategray;
+    color: navajowhite;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.button {
+    background-color: #FF6B5E;
+    border: none;
+    color: antiquewhite;
+    padding: 7px 16px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.button:hover {
+    background-color: #E65349;
+}
+
+#interactive-animation-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#pizza-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+#pizza-animation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#pizza-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 60px;
+}
+
+#continuous-animation-container {
+    margin-top: 30px;
+}
+
+#sources {
+    font-size: 12px;
+}

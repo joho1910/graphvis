@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EA1: Interaktive animierte Scheibe</title>
+    <script src="01_interactive_animated_slice.js"></script>
+    <link rel="stylesheet" href="01_interactive_animated_slice.css">
+</head>
+<body onload=init()>
+
+<div id="interactive-animation-container">
+    <h1>Interaktive animierte Scheibe</h1>
+
+    <div id="pizza-container">
+        <div id="pizza-animation">
+            <img id="pizza" alt="Pizza" width="400" height="400">
+        </div>
+
+        <div id="pizza-controls">
+            <span>Steuerung der Scheibe:</span>
+            <button class="button" onclick="animatePizza()">Animation starten/stoppen<br>(or A drücken)</button>
+            <button class="button" onclick="singleStepAnimation(Direction.LEFT)">Ein Schritt nach links<br>(oder L drücken)</button>
+            <button class="button" onclick="singleStepAnimation(Direction.RIGHT)">Ein Schritt nach rechts<br>(oder R drücken)</button>
+        </div>
+    </div>
+
+</div>
+
+<div id="continuous-animation-container">
+    <h1>Kontinuierlich animiertes Objekt</h1>
+    <img id="pizza_slice" alt="Pizza Slice" width="300" height="300">
+</div>
+
+<div>
+    <span id="sources">Grafiken selbst erstellt.</span>
+</div>
+
+</body>
+</html>
