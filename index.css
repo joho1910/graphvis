@@ -1,0 +1,12 @@
+body {
+    background-color: #dbe8d8;
+    color: #01949a;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+#links {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: column
+}
