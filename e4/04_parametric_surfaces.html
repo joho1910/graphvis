@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Parametrisierte Flächen</title>
+    <script src="04_parametric_surfaces.js" defer></script>
+    <link rel="stylesheet" href="04_parametric_surfaces.css">
+</head>
+<body onload=renderCurrentSurface()>
+<div id="content-wrapper">
+    <h1>Parametrisierte Flächen</h1>
+    <div id="main-content">
+        <div id="canvas-wrapper">
+            <canvas id="canvas" width="750" height="750"></canvas>
+            <p id="canvas-description"></p>
+            <p id="formula-source"></p>
+        </div>
+        <div id="right-content">
+            <button class="button" onclick="nextSurface()">➜ nächste Fläche<br>(oder B drücken)</button>
+            <p id="formulas"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
