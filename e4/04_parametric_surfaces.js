@@ -6,10 +6,19 @@ const gl = canvas.getContext('experimental-webgl');
 
 // Pipeline setup.
 gl.clearColor(.95, .95, .95, 1);
+
 // Backface culling.
 gl.frontFace(gl.CCW);
 gl.enable(gl.CULL_FACE);
 gl.cullFace(gl.BACK);
+
+// Depth(Z)-Buffer
+gl.enable(gl.DEPTH_TEST);
+gl.depthFunc(gl.LEQUAL)
+
+// Polygon offset of rastered Fragments.
+gl.enable(gl.POLYGON_OFFSET_FILL);
+gl.polygonOffset(1, 1);
 
 // Compile vertex shader.
 const vsSource = '' +
@@ -87,7 +96,7 @@ function createSchnecke() {
 function createTranguloidTrefoil() {
     createShape(
         null, null, 0.17,
-        -Math.PI, -Math.PI, 2 * Math.PI, 2 * Math.PI,
+        -Math.PI, -Math.PI, Math.PI, Math.PI,
         (u) => null,
         (a, b, u, v, h) => 2 * Math.sin(3 * u) / (2 + Math.cos(v)),
         (a, b, u, v, h) => 2 * (Math.sin(u) + 2 * Math.sin(2 * u)) / (2 + Math.cos(v + 2 * Math.PI / 3)),
@@ -116,8 +125,8 @@ function createShape(a, b, c,
                      u_min, v_min, u_max, v_max,
                      h_func, x_func, y_func, z_func,
                      color_r_func, color_g_func, color_b_func) {
-    const n = 48;
-    const m = 18;
+    const n = 96;
+    const m = 36;
 
     // Positions.
     vertices = new Float32Array(3 * (n + 1) * (m + 1));
@@ -128,8 +137,8 @@ function createShape(a, b, c,
     // Index data for colors.
     colors = new Float32Array(4 * (n + 1) * (m + 1));
 
-    const du = u_max / n;
-    const dv = v_max / m;
+    const du = (u_max - u_min) / n;
+    const dv = (v_max - v_min) / m;
 
     // Counter for entries in index array.
     let iLines = 0;
@@ -241,36 +250,31 @@ function updateSurface() {
 
     // Setup position vertex buffer object.
     gl.bindBuffer(gl.ARRAY_BUFFER, vboPos);
-    gl.bufferData(gl.ARRAY_BUFFER,
-        vertices, gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
     // Setup lines index buffer object.
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iboLines);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
-        indicesLines, gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indicesLines, gl.STATIC_DRAW);
     iboLines.numberOfElements = indicesLines.length;
 
     // Setup tris index buffer object.
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iboTris);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
-        indicesTris, gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indicesTris, gl.STATIC_DRAW);
     iboTris.numberOfElements = indicesTris.length;
 
     // Clear framebuffer and render primitives.
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // Setup rendering tris
     gl.enableVertexAttribArray(colAttrib);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iboTris);
-    gl.drawElements(gl.TRIANGLES,
-        iboTris.numberOfElements, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, iboTris.numberOfElements, gl.UNSIGNED_SHORT, 0);
 
     // Setup rendering lines
     gl.disableVertexAttribArray(colAttrib);
     gl.vertexAttrib4f(colAttrib, 0, 0, 0, 1);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iboLines);
-    gl.drawElements(gl.LINES,
-        iboLines.numberOfElements, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.LINES, iboLines.numberOfElements, gl.UNSIGNED_SHORT, 0);
 
     gl.enableVertexAttribArray(colAttrib);
 }
