@@ -39,9 +39,22 @@
 <body onload="app.start()">
 <div id="content-wrapper">
     <h1>Kamerabewegung</h1>
-    <canvas id="canvas" width="1850" height="750"></canvas>
-    <button onclick="app.increaseRecursionLevel()">Rekursionslevel erhöhen</button>
-    <button onclick="app.decreaseRecursionLevel()">Rekursionslevel verringern</button>
+    <canvas id="canvas" width="650" height="650"></canvas>
+    <div id="recursionSliderWrapper" style="margin-top:10px">
+        <label for="recursionLevelSlider">Rekursionslevel:</label>
+        <input type="range" id="recursionLevelSlider" min="0" max="6" step="1" value="2">
+        <span id="recursionValue">2</span>
+    </div>
+
+    <div>
+        <p style="margin-bottom:5px"><b>Bewegungssteuerung</b>:</p>
+        <ul style="margin-top:0; margin-bottom:0;">
+            <li><b>←-Taste</b>: Drehen im Uhrzeigersinn.</li>
+            <li><b>→-Taste</b>: Drehen entgegen dem Uhrzeigersinn.</li>
+            <li><b>N / N-Shift</b>: Radius ändern.</li>
+            <li><b>Y / Y-Shift</b>: Kamera nach unten/oben bewegen.</li>
+        </ul>
+    </div>
 </div>
 </body>
 </html>

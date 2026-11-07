@@ -352,33 +352,22 @@ var app = (function () {
         render();
     }
 
-    function increaseRecursionLevel() {
-        var level = recursiveSphere.getRecursionLevel();
+    var recursionLevelSlider = document.getElementById("recursionLevelSlider");
+    var recursionValueSpan = document.getElementById("recursionValue");
 
-        if (level >= 6) {
-            return;
-        }
+    recursionLevelSlider.addEventListener('input', function() {
+        var level = this.value;
 
-        recursiveSphere.setRecursionLevel(level + 1);
+        recursiveSphere.setRecursionLevel(level);
+
+        recursionValueSpan.textContent = level;
+
         updateRecursiveSphere();
-    }
-
-    function decreaseRecursionLevel() {
-        var level = recursiveSphere.getRecursionLevel();
-
-        if (level <= 0) {
-            return;
-        }
-
-        recursiveSphere.setRecursionLevel(level - 1);
-        updateRecursiveSphere();
-    }
+    });
 
     // App interface.
     return {
-        start: start,
-        increaseRecursionLevel: increaseRecursionLevel,
-        decreaseRecursionLevel: decreaseRecursionLevel,
+        start: start
     }
 
 }());
