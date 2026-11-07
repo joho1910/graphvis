@@ -3,12 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Kamerabewegung</title>
-    <script src="05_camera_movement.js" defer></script>
     <link rel="stylesheet" href="05_camera_movement.css">
+
+    <script src="../ext/gl-matrix.js"></script>
+    <script src="05_vertexData_cone.js"></script>
+    <script src="05_vertexData_torus.js"></script>
+    <script src="05_vertexData_recursiveSphere.js"></script>
+    <script src="05_vertexData_plane.js"></script>
+    <script src="05_camera.js" defer></script>
+    <script type="x-shader/x-vertex" id="vertexshader">
+        attribute vec3 aPosition;
+			attribute vec3 aNormal;
+
+			uniform mat4 uPMatrix;
+			uniform mat4 uMVMatrix;
+
+			varying vec4 vColor;
+
+			void main(){
+				gl_Position = uPMatrix * uMVMatrix * vec4(aPosition, 1.0);
+
+				vColor = vec4(aNormal.x, aNormal.y, aNormal.z, 1.0);
+				vColor = (vColor + 1.0) / 2.0;
+			}
+    </script>
+    <script type="x-shader/x-fragment" id="fragmentshader">
+        precision mediump float;
+			varying vec4 vColor;
+
+			void main() {
+				gl_FragColor = vColor;
+			}
+    </script>
 </head>
-<body>
+<body onload="app.start()">
 <div id="content-wrapper">
-    <canvas id="canvas" width="750" height="750"></canvas>
+    <h1>Kamerabewegung</h1>
+    <canvas id="canvas" width="1850" height="750"></canvas>
+    <button onclick="app.increaseRecursionLevel()">Rekursionslevel erhöhen</button>
+    <button onclick="app.decreaseRecursionLevel()">Rekursionslevel verringern</button>
 </div>
 </body>
 </html>
