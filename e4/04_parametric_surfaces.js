@@ -93,17 +93,17 @@ function createSchnecke() {
     );
 }
 
-function createTranguloidTrefoil() {
+function createKidneySurface() {
     createShape(
-        null, null, 0.17,
-        -Math.PI, -Math.PI, Math.PI, Math.PI,
+        null, null, 0.24,
+        0, -Math.PI / 2, 2 * Math.PI, Math.PI / 2,
         (u) => null,
-        (a, b, u, v, h) => 2 * Math.sin(3 * u) / (2 + Math.cos(v)),
-        (a, b, u, v, h) => 2 * (Math.sin(u) + 2 * Math.sin(2 * u)) / (2 + Math.cos(v + 2 * Math.PI / 3)),
-        (a, b, u, v, h) => (Math.cos(u) - 2 * Math.cos(2 * u)) * (2 + Math.cos(v)) * (2 + Math.cos(v + 2 * Math.PI / 3)) / 4,
+        (a, b, u, v, h) => Math.cos(u) * (3 * Math.cos(v) - Math.cos(3 * v)),
+        (a, b, u, v, h) => 3 * Math.sin(v) - Math.sin(3 * v),
+        (a, b, u, v, h) => Math.sin(u) * (3 * Math.cos(v) - Math.cos(3 * v)),
         (u, v) => 0.5  + 0.5 * Math.cos(v),
-        (u, v) => 0.8,
-        (u, v) => 0.5  + 0.5 * Math.sin(u)
+        (u, v) => 0.5  + 0.5 * Math.sin(u),
+        (u, v) => 0.8
     );
 }
 
@@ -202,7 +202,7 @@ function createShape(a, b, c,
 }
 
 let i = 0;
-const surface = ['snail', 'tranguloid trefoil', 'own']
+const surface = ['snail', 'kidney', 'custom']
 
 function nextSurface() {
     if (i >= surface.length-1) {
@@ -225,14 +225,14 @@ function renderCurrentSurface() {
         description.textContent = "Schnecke";
         source.innerHTML = "<a href='http://www.3d-meier.de/tut3/Seite17.html' target='_blank'>Quelle</a>";
         formulas.textContent = "";
-    } else if (currentSurface === 'tranguloid trefoil') {
-        createTranguloidTrefoil();
-        description.textContent = "Tranguloid Trefoil";
-        source.innerHTML = "<a href='http://www.3d-meier.de/tut3/Seite57.html' target='_blank'>Quelle</a>";
+    } else if (currentSurface === 'kidney') {
+        createKidneySurface();
+        description.textContent = "Kidney Surface";
+        source.innerHTML = "<a href='http://www.3d-meier.de/tut3/Seite42.html' target='_blank'>Quelle</a>";
         formulas.textContent = "";
-    } else if (currentSurface === 'own') {
+    } else if (currentSurface === 'custom') {
         createCustomShape();
-        description.textContent = "Eigene parametrisierte Fläche";
+        description.textContent = "Wobbly Torus";
         source.textContent = "Eigenkreation";
         formulas.innerHTML = "<b>Formel:</b><br>" +
             "x = b sin(v) + 0,5 sin(4u)<br>" +
