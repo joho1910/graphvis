@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Z-Buffer Visualisierung</title>
+    <link rel="stylesheet" href="07_z_buffer_visualisation.css">
+
+    <script src="../ext/gl-matrix.js"></script>
+    <script src="07_vertexData_plane.js"></script>
+    <script src="07_vertexData_sphere.js"></script>
+    <script src="07_vertexData_torus.js"></script>
+    <script src="07_vertexData_cone.js"></script>
+    <script src="07_z_buffer_visualisation.js"></script>
+    <script type="x-shader/x-vertex" id="vertexshader">
+        precision mediump float;
+
+        attribute vec3 aPosition;
+        attribute vec3 aNormal;
+
+        uniform mat4 uPMatrix;
+        uniform mat4 uMVMatrix;
+        uniform mat3 uNMatrix;
+        uniform vec4 uColor;
+
+        varying vec4 vColor;
+
+        void main(){
+            gl_Position = uPMatrix * uMVMatrix * vec4(aPosition, 1.0);
+
+            vec3 tNormal = uNMatrix * aNormal;
+
+            vColor = uColor;
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragmentshader">
+        precision mediump float;
+        varying vec4 vColor;
+
+        void main() {
+            float zFragment = gl_FragCoord.z;
+
+            gl_FragColor = vec4(vec3(zFragment), 1.0);
+        }
+    </script>
+</head>
+<body onload="app.start()">
+<div id="content-wrapper">
+    <h1>Z-Buffer Visualisierung</h1>
+    <canvas id="canvas" width="650" height="650"></canvas>
+    <p style="margin-bottom:5px;"><b>Bewegungssteuerung:</b></p>
+    <ul style="margin-top:0; margin-bottom:0;">
+        <li><b>←-Taste</b>: Drehen im Uhrzeigersinn.</li>
+        <li><b>→-Taste</b>: Drehen entgegen dem Uhrzeigersinn.</li>
+        <li><b>W</b>: Kamera nach oben bewegen.</li>
+        <li><b>S</b>: Kamera nach unten bewegen.</li>
+        <li><b>A</b>: Kamera nach links bewegen.</li>
+        <li><b>S</b>: Kamera nach rechts bewegen.</li>
+    </ul>
+</div>
+</body>
+</html>
