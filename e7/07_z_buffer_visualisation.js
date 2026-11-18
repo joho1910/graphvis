@@ -243,7 +243,6 @@ var app = (function () {
                     // Orbit camera counter-clockwise.
                     camera.zAngle += deltaRotate;
                     break;
-                    //note: arrowup und arrowdown implementieren?
                 case('w'):
                     // Move camera up.
                     camera.eye[1] += deltaTranslate;
@@ -255,8 +254,6 @@ var app = (function () {
                     camera.center[1] -= deltaTranslate;
                     break;
                 case('a'):
-                    //note: hier muss das noch so gemacht werden, dass das links und rechts bewegen abhängig vom winkel ist!!!, Oder??
-
                     // Move camera left.
                     camera.eye[0] -= deltaTranslate;
                     camera.center[0] -= deltaTranslate;

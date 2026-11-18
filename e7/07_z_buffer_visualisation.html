@@ -29,7 +29,8 @@
 
             vec3 tNormal = uNMatrix * aNormal;
 
-            vColor = uColor;
+            vColor = vec4(tNormal.z, tNormal.z, tNormal.z, 1.0);
+        vColor = uColor * (vColor + 1.0) / 2.0;
         }
     </script>
     <script type="x-shader/x-fragment" id="fragmentshader">
@@ -51,10 +52,10 @@
     <ul style="margin-top:0; margin-bottom:0;">
         <li><b>←-Taste</b>: Drehen im Uhrzeigersinn.</li>
         <li><b>→-Taste</b>: Drehen entgegen dem Uhrzeigersinn.</li>
-        <li><b>W</b>: Kamera nach oben bewegen.</li>
-        <li><b>S</b>: Kamera nach unten bewegen.</li>
-        <li><b>A</b>: Kamera nach links bewegen.</li>
-        <li><b>S</b>: Kamera nach rechts bewegen.</li>
+        <li><b>W</b>: Kamera entlang der positiven Y-Achse nach oben bewegen.</li>
+        <li><b>S</b>: Kamera entlang der negativen Y-Achse nach unten bewegen.</li>
+        <li><b>A</b>: Kamera entlang der negativen X-Achse nach links bewegen.</li>
+        <li><b>D</b>: Kamera entlang der positiven X-Achse nach rechts bewegen.</li>
     </ul>
 </div>
 </body>
