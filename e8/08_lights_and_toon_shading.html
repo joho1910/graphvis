@@ -19,7 +19,10 @@
         uniform mat4 uMVMatrix;
         uniform mat3 uNMatrix;
 
-        //uniform vec4 uColor;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vView;
+
         varying vec4 vColor;
 
         // Ambient light.
@@ -43,7 +46,59 @@
         };
         uniform PhongMaterial material;
 
-        // Phong illumination for single light source,
+        void main(){
+            // Calculate vertex position in eye coordinates.
+            vec4 tPosition = uMVMatrix * vec4(aPosition, 1.0);
+
+            // Calculate projection.
+            gl_Position = uPMatrix * tPosition;
+
+            // vec3 tNormal = normalize(uNMatrix * aNormal);
+
+            // Calculate view vector.
+            //vec3 v = normalize(-tPosition.xyz);
+
+            //vColor = vec4( phong(tPosition.xyz, tNormal, v), 1.0);
+
+            vPosition = tPosition.xyz;
+            vNormal = normalize(uNMatrix * aNormal);
+
+            vView = normalize(-tPosition.xyz);
+
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragmentshader">
+        precision mediump float;
+
+		varying vec3 vPosition;
+		varying vec3 vNormal;
+		varying vec3 vView;
+
+		// Ambient light
+		uniform vec3 ambientLight;
+
+		// Pointlights.
+		const int MAX_LIGHT_SOURCES = 2;
+		struct LightSource {
+			bool isOn;
+			vec3 position;
+			vec3 color;
+		};
+		uniform LightSource light[MAX_LIGHT_SOURCES];
+
+		// Material.
+		struct PhongMaterial {
+			vec3 ka;
+			vec3 kd;
+			vec3 ks;
+			float ke;
+		};
+		uniform PhongMaterial material;
+
+		// Enable/disable toon shading.
+		uniform bool uToonShading;
+
+		// Phong illumination for single light source,
         // no ambient light.
         vec3 phong(vec3 p, vec3 n, vec3 v, LightSource l) {
             vec3 L = l.color;
@@ -57,10 +112,33 @@
             vec3 diffuse = material.kd * L * sn;
             vec3 specular = material.ks * L * pow(rv, material.ke);
 
-            return diffuse + specular;
+            // Toon shading.
+        	if (uToonShading) {
+        		float toonIntensity;
+
+        		if (sn < 0.25) {
+        			toonIntensity = 0.25;
+        		} else if (sn < 0.5) {
+        			toonIntensity = 0.5;
+        		} else if (sn < 0.75) {
+        			toonIntensity = 0.75;
+        		} else {
+        			toonIntensity = 1.0;
+        		}
+
+        		diffuse = material.kd * L * toonIntensity;
+
+      	  		if (rv > 0.8) {
+      			  	specular = material.ks * L;
+        		} else {
+					specular = vec3(0.0);
+        		}
+      	  	}
+
+     	   	return diffuse + specular;
         }
 
-        // Phong illumination for multiple light sources
+		// Phong illumination for multiple light sources
         vec3 phong(vec3 p, vec3 n, vec3 v) {
 
             // Calculate ambient light.
@@ -75,27 +153,24 @@
             return result;
         }
 
-        void main(){
-            // Calculate vertex position in eye coordinates.
-            vec4 tPosition = uMVMatrix * vec4(aPosition, 1.0);
-            // Calculate projektion.
-            gl_Position = uPMatrix * tPosition;
-
-            vec3 tNormal = normalize(uNMatrix * aNormal);
-
-            // Calculate view vector.
-            vec3 v = normalize(-tPosition.xyz);
-
-            vColor = vec4( phong(tPosition.xyz, tNormal, v), 1.0);
-        }
-    </script>
-    <script type="x-shader/x-fragment" id="fragmentshader">
-        precision mediump float;
-
         varying vec4 vColor;
 
         void main() {
-            gl_FragColor = vColor;
+        	vec3 n = normalize(vNormal);
+        	vec3 v = normalize(vView);
+
+        	vec3 color = phong(vPosition, n, v);
+
+        	// Outlines.
+        	if (uToonShading) {
+        		float outline = dot(v, n);
+
+        		if (outline < 0.25) {
+        			color = vec3(0.0, 0.0, 0.0);
+        		}
+        	}
+
+            gl_FragColor = vec4(color, 1.0);
         }
     </script>
 </head>
