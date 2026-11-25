@@ -1,0 +1,10 @@
+body {
+    font-family: 'Trebuchet MS', Helvetica, sans-serif;
+}
+
+#content-wrapper {
+    margin-left: 25px;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+}
